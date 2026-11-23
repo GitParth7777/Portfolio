@@ -1,6 +1,6 @@
 import { useRef, type ReactNode } from "react";
 import { AnimatePresence, motion, useInView } from "motion/react";
-import { Mic } from "lucide-react";
+import { Bike, ChefHat, CircleCheck, Clock, MapPin, Mic, Store } from "lucide-react";
 import { useTicker } from "../hooks/useTicker";
 
 /* Small animated illustrations shown inside the experience / project cards.
@@ -145,6 +145,102 @@ function Line({ n, children }: { n: number; children: ReactNode }) {
     <div className="flex min-h-[1.4em] gap-3">
       <span className="w-3 shrink-0 select-none text-right text-zinc-600">{n}</span>
       <span className="min-w-0 truncate">{children}</span>
+    </div>
+  );
+}
+
+/* ───────────── Vingo: one order split across shops, each with its own status ───────────── */
+const deliveryStages = [
+  { label: "Pending", icon: Clock },
+  { label: "Preparing", icon: ChefHat },
+  { label: "Out for delivery", icon: Bike },
+  { label: "Delivered", icon: CircleCheck },
+];
+const subOrders = [
+  { shop: "Spice Garden", items: "Paneer Tikka × 2", offset: 0 },
+  { shop: "Pizza Point", items: "Margherita × 1", offset: 2 },
+];
+
+export function DeliveryVisual() {
+  const { ref, inView } = useVisible();
+  const tick = useTicker(1700, inView);
+
+  return (
+    <div ref={ref} className="flex flex-col gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+        <span className="font-mono">Order #VG-1024</span>
+        <span className="flex gap-1.5">
+          {["Customer", "Owner", "Delivery"].map((r) => (
+            <span key={r} className="rounded-full border border-line bg-card px-2 py-0.5 text-[10px] text-muted">
+              {r}
+            </span>
+          ))}
+        </span>
+      </div>
+
+      {subOrders.map((o) => {
+        const stage = (tick + o.offset) % deliveryStages.length;
+        const done = stage === deliveryStages.length - 1;
+        const Current = deliveryStages[stage].icon;
+        return (
+          <div key={o.shop} className="rounded-xl border border-line bg-card p-3">
+            <div className="flex items-center gap-2.5">
+              <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-orange-500/10 text-orange-500">
+                <Store className="size-4" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium">{o.shop}</span>
+                <span className="block truncate text-[11px] text-muted">{o.items}</span>
+              </span>
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={stage}
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2 }}
+                  className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                    done ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-accent/10 text-accent"
+                  }`}
+                >
+                  <Current className="size-3" />
+                  {deliveryStages[stage].label}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+            <div className="mt-3 grid grid-cols-4 gap-1">
+              {deliveryStages.map((_, si) => (
+                <span key={si} className="h-1 overflow-hidden rounded-full bg-line">
+                  <motion.span
+                    className={`block h-full rounded-full ${done ? "bg-emerald-500" : "bg-accent"}`}
+                    initial={false}
+                    animate={{ width: si <= stage ? "100%" : "0%" }}
+                    transition={{ duration: 0.4, delay: si * 0.05 }}
+                  />
+                </span>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* mini map: rider heading from the shop to the pinned address */}
+      <div
+        className="relative h-14 overflow-hidden rounded-xl border border-line bg-card"
+        style={{ backgroundImage: "radial-gradient(var(--line) 1px, transparent 1px)", backgroundSize: "12px 12px" }}
+      >
+        <Store className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-orange-500" />
+        <MapPin className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-accent" />
+        <div className="absolute inset-x-9 top-1/2 border-t border-dashed border-muted/40" />
+        <div className="absolute inset-x-9 top-0 h-full">
+          <span
+            className="animate-fly absolute top-1/2 grid size-7 place-items-center rounded-full bg-accent text-white shadow-md shadow-accent/30"
+            style={{ animationDuration: "3.4s", animationPlayState: inView ? "running" : "paused" }}
+          >
+            <Bike className="size-3.5" />
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

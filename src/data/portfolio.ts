@@ -28,7 +28,7 @@ export const about = {
   ],
 };
 
-export type Visual = "voice" | "editor";
+export type Visual = "voice" | "editor" | "delivery";
 
 export type Highlight = { icon: string; label: string; text: string };
 
@@ -113,7 +113,10 @@ export type Project = {
   tagline: string;
   tags: string[];
   github: string;
-  demo: string;
+  /** Leave out when there is no live deployment. */
+  demo?: string;
+  /** Full-width card spanning both columns. */
+  wide?: boolean;
   why: string;
   how: string;
   result: string;
@@ -144,6 +147,18 @@ export const projects: Project[] = [
     how: "The editor is built with React and CodeMirror on a Node.js/Express.js backend. Every change is synced through Socket.io (WebSocket) events, and room-based sessions show join/leave notifications so everyone knows who is active.",
     result: "A live demo on Render where users in the same room see each other's edits in real time.",
     visual: "editor",
+  },
+  {
+    id: "vingo",
+    name: "Vingo",
+    tagline: "Full-stack food delivery app for customers, shop owners and delivery partners.",
+    tags: ["React", "Redux Toolkit", "Node.js", "Express.js", "MongoDB", "JWT", "Firebase Auth", "Cloudinary", "Leaflet", "Tailwind CSS"],
+    github: "https://github.com/GitParth7777/Vingo---Ai-Food-Delivery-Application",
+    wide: true,
+    why: "A food order involves three people (the customer, the shop owner and the delivery partner), and each needs a different view of the same order.",
+    how: "A React + Redux Toolkit frontend talks to an Express.js/MongoDB REST API secured with JWT. Users sign in with email or Google (Firebase) and can reset passwords with an emailed OTP. The app detects the user's city from browser location (Geoapify) to show nearby shops and dishes. Owners manage their shop and menu with Cloudinary image uploads, and checkout pins the delivery address on a Leaflet map.",
+    result: "One order can span several shops, each tracked through pending → preparing → out for delivery → delivered, with separate dashboards for customers, shop owners and delivery partners.",
+    visual: "delivery",
   },
 ];
 

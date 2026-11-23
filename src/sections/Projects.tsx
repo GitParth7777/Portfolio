@@ -5,25 +5,27 @@ import { BentoCard } from "../components/BentoCard";
 import { DetailModal } from "../components/DetailModal";
 import { SectionHeading } from "../components/SectionHeading";
 import { Magnetic, Tag } from "../components/ui";
-import { EditorVisual, VoiceVisual } from "../components/visuals";
+import { DeliveryVisual, EditorVisual, VoiceVisual } from "../components/visuals";
 import { projects, type Project } from "../data/portfolio";
 import { Block } from "./Experience";
 
-const visuals = { voice: VoiceVisual, editor: EditorVisual } as const;
+const visuals = { voice: VoiceVisual, editor: EditorVisual, delivery: DeliveryVisual } as const;
 
 function Links({ p }: { p: Project }) {
   return (
     <div className="flex flex-wrap gap-2">
-      <Magnetic strength={0.2}>
-        <a
-          href={p.demo}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-full bg-fg px-4 py-2 text-sm font-medium text-bg transition-opacity hover:opacity-85"
-        >
-          Live demo <ArrowUpRight className="size-4" />
-        </a>
-      </Magnetic>
+      {p.demo && (
+        <Magnetic strength={0.2}>
+          <a
+            href={p.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full bg-fg px-4 py-2 text-sm font-medium text-bg transition-opacity hover:opacity-85"
+          >
+            Live demo <ArrowUpRight className="size-4" />
+          </a>
+        </Magnetic>
+      )}
       <Magnetic strength={0.2}>
         <a
           href={p.github}
@@ -48,20 +50,31 @@ export function Projects() {
       <SectionHeading
         eyebrow="Projects"
         title="Things I built on my own"
-        description="Real-time and AI side projects, both deployed with live demos."
+        description="Full-stack side projects, from AI and real-time collaboration to food delivery."
       />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {projects.map((p, i) => {
           const Visual = visuals[p.visual as keyof typeof visuals];
           return (
-            <BentoCard key={p.id} layoutId={`proj-${p.id}`} delay={i * 0.1} className="group flex min-w-0 flex-col gap-5 p-4 sm:gap-6 sm:p-6">
-              <div className="flex min-h-[240px] min-w-0 items-center rounded-2xl bg-card-2 p-3 ring-1 ring-line sm:min-h-[260px] sm:p-4">
+            <BentoCard
+              key={p.id}
+              layoutId={`proj-${p.id}`}
+              delay={i * 0.1}
+              className={`group flex min-w-0 flex-col gap-5 p-4 sm:gap-6 sm:p-6 ${
+                p.wide ? "lg:col-span-2 lg:flex-row-reverse lg:items-stretch lg:gap-8" : ""
+              }`}
+            >
+              <div
+                className={`flex min-h-[240px] min-w-0 items-center rounded-2xl bg-card-2 p-3 ring-1 ring-line sm:min-h-[260px] sm:p-4 ${
+                  p.wide ? "lg:w-[46%] lg:shrink-0" : ""
+                }`}
+              >
                 <div className="w-full min-w-0">{Visual && <Visual />}</div>
               </div>
-              <div className="flex flex-1 flex-col gap-3">
+              <div className={`flex min-w-0 flex-1 flex-col gap-3 ${p.wide ? "lg:justify-center lg:py-2" : ""}`}>
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="text-2xl font-semibold tracking-tight">{p.name}</h3>
+                    <h3 className={`font-semibold tracking-tight ${p.wide ? "text-2xl lg:text-3xl" : "text-2xl"}`}>{p.name}</h3>
                     <p className="mt-1 text-muted">{p.tagline}</p>
                   </div>
                   <button
@@ -78,7 +91,7 @@ export function Projects() {
                     <Tag key={t}>{t}</Tag>
                   ))}
                 </div>
-                <div className="mt-auto pt-2">
+                <div className={`pt-2 ${p.wide ? "lg:mt-2" : "mt-auto"}`}>
                   <Links p={p} />
                 </div>
               </div>
@@ -88,7 +101,7 @@ export function Projects() {
       </div>
       <p className="mt-4 flex items-start gap-2 text-xs text-muted sm:items-center">
         <Info className="size-3.5 shrink-0" />
-        Both demos run on Render's free tier, so the first load can take up to a minute while the server wakes up.
+        The Shifra and CodeSync demos run on Render's free tier, so the first load can take up to a minute while the server wakes up.
       </p>
 
       <DetailModal layoutId={active ? `proj-${active.id}` : null} open={!!active} onClose={close} label={active?.name ?? ""}>
