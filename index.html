@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parth Babariya | Full-Stack Developer</title>
+    <meta
+      name="description"
+      content="Parth Babariya is a Full-Stack Developer in Ahmedabad building enterprise web apps with React, TypeScript, FastAPI and PostgreSQL. Forward Deployed Engineer at CCTech."
+    />
+    <meta name="author" content="Parth Babariya" />
+    <meta name="keywords" content="Parth Babariya, Full-Stack Developer, React Developer, FastAPI, TypeScript, Ahmedabad, CCTech, Portfolio" />
+    <meta name="theme-color" content="#0a0a0c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- TODO after hosting is decided: add canonical + og:url with the real domain -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Parth Babariya | Full-Stack Developer" />
+    <meta property="og:description" content="Enterprise web apps with React, TypeScript, FastAPI and PostgreSQL, from the database schema to the last button on the screen." />
+    <meta property="og:image" content="/parth.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Parth Babariya",
+        "jobTitle": "Full-Stack Developer",
+        "worksFor": { "@type": "Organization", "name": "Centre for Computational Technologies (CCTech)" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Adani University" },
+        "address": { "@type": "PostalAddress", "addressLocality": "Ahmedabad", "addressRegion": "Gujarat", "addressCountry": "IN" },
+        "email": "mailto:parth.babariya70165@gmail.com",
+        "sameAs": ["https://www.linkedin.com/in/babariyaparth990/", "https://github.com/GitParth7777"],
+        "knowsAbout": ["React", "TypeScript", "FastAPI", "PostgreSQL", "Node.js", "Full-Stack Development"]
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Apply saved / system theme before paint to avoid a flash -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.classList.toggle("dark", t === "dark");
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <h1>Parth Babariya: Full-Stack Developer</h1>
+      <p>React · TypeScript · FastAPI · PostgreSQL. Email: parth.babariya70165@gmail.com</p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

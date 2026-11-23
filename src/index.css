@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-card-2: var(--card-2);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-ok: var(--ok);
+}
+
+/* ---------- Theme tokens ---------- */
+:root {
+  --bg: #f5f5f7;
+  --card: #ffffff;
+  --card-2: #f2f2f5;
+  --line: rgba(0, 0, 0, 0.08);
+  --fg: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #5b4cff;
+  --accent-2: #2f7cf6;
+  --ok: #16a34a;
+  --glow: rgba(91, 76, 255, 0.55);
+  --glow-soft: rgba(91, 76, 255, 0.07);
+  --grid: rgba(0, 0, 0, 0.045);
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 32px -16px rgba(0, 0, 0, 0.12);
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #08080a;
+  --card: #111114;
+  --card-2: #19191e;
+  --line: rgba(255, 255, 255, 0.08);
+  --fg: #ededf0;
+  --muted: #8e8e98;
+  --accent: #8b7bff;
+  --accent-2: #4f8cff;
+  --ok: #22c55e;
+  --glow: rgba(139, 123, 255, 0.7);
+  --glow-soft: rgba(139, 123, 255, 0.08);
+  --grid: rgba(255, 255, 255, 0.035);
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 30%, transparent);
+}
+
+section[id] {
+  scroll-margin-top: 96px;
+}
+
+/* ---------- Lenis smooth scroll ---------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---------- Bento card + spotlight border ---------- */
+.card {
+  position: relative;
+  isolation: isolate;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--line), var(--card-shadow);
+  --x: 50%;
+  --y: 50%;
+}
+
+/* glowing border that follows the cursor */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--x) var(--y), var(--glow), transparent 70%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* soft inner glow under the content */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--x) var(--y), var(--glow-soft), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (hover: hover) {
+  .card:hover::before,
+  .card:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ---------- Background grid ---------- */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+/* ---------- Marquee ---------- */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee var(--duration, 40s) linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+/* ---------- Small looping animations used by visuals ---------- */
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(1); }
+}
+@keyframes ping-soft {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+@keyframes fly {
+  0% { left: 0%; opacity: 0; transform: translateY(-50%) scale(0.8); }
+  10% { opacity: 1; transform: translateY(-50%) scale(1); }
+  90% { opacity: 1; transform: translateY(-50%) scale(1); }
+  100% { left: calc(100% - 28px); opacity: 0; transform: translateY(-50%) scale(0.8); }
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.animate-wave { animation: wave 1.1s ease-in-out infinite; transform-origin: center; }
+.animate-ping-soft { animation: ping-soft 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
+.animate-fly { animation: fly 2.8s ease-in-out infinite; }
+.animate-blink { animation: blink 1s step-end infinite; }
+
+/* ---------- Theme switch (View Transitions circular reveal) ---------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ---------- Accessibility: reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .animate-wave,
+  .animate-ping-soft,
+  .animate-fly,
+  .animate-blink {
+    animation: none !important;
+  }
+}

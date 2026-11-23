@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+.env.local
+*.log
+
+# duplicate of public/Parth_Babariya_Resume.pdf
+Parth_Babariya_Resume (1).pdf
